@@ -1,0 +1,31 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "S06: запустить API",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "src/NotesApi",
+        "--urls",
+        "http://localhost:8080"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "S06: тесты",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "test",
+        "--logger",
+        "trx;LogFileName=s06-tests.trx",
+        "--results-directory",
+        "TestResults"
+      ],
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

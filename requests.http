@@ -1,0 +1,51 @@
+@baseUrl = http://localhost:8080
+
+### 0. Приложение отвечает
+GET {{baseUrl}}/health
+
+### 1. Обычный поиск alice: две заметки после сброса
+GET {{baseUrl}}/notes/search?q=private
+X-User: alice
+
+### 2. Контрольная запись bob
+GET {{baseUrl}}/notes/search?q=secret
+X-User: bob
+
+### 3. Жалоба на поиск: специальная строка, пользователь по-прежнему alice
+GET {{baseUrl}}/notes/search?q=%' OR 1=1 -- 
+X-User: alice
+
+### 4. Эксперимент: апостроф в поисковой строке
+GET {{baseUrl}}/notes/search?q=O'Reilly
+X-User: alice
+
+### 5. Корректное создание заметки
+POST {{baseUrl}}/notes
+X-User: alice
+Content-Type: application/json
+
+{"text":"seminar-created-note","tag":"work"}
+
+### 6. Созданная заметка находится поиском
+GET {{baseUrl}}/notes/search?q=seminar-created-note
+X-User: alice
+
+### 7. Пустой текст
+POST {{baseUrl}}/notes
+X-User: alice
+Content-Type: application/json
+
+{"text":"","tag":"work"}
+
+### 8. Поврежденный JSON
+POST {{baseUrl}}/notes
+X-User: alice
+Content-Type: application/json
+
+{ not valid json
+
+### 9. Штатное вложение для самостоятельного блока
+GET {{baseUrl}}/attachments?name=welcome.txt
+
+### 10. Место для собственного запроса к вложениям
+# Добавьте отдельный запрос, воспроизводящий найденное нарушение.
